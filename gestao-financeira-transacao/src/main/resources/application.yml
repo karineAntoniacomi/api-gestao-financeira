@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: transacoes-service
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  spring:
+    profiles:
+       active: local
+
