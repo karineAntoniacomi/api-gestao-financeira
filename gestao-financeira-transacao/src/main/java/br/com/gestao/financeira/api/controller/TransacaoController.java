@@ -1,6 +1,7 @@
 package br.com.gestao.financeira.api.controller;
 
 import br.com.gestao.financeira.api.domain.transacao.*;
+import br.com.gestao.financeira.api.service.ConversaoMoedaService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/transacoes")
 public class TransacaoController {
 
     @Autowired // injeção de dependência - spring fica responsável por instanciar
     private TransacaoRepository repository;
+
+    @Autowired
+    private ConversaoMoedaService conversaoMoedaService;
 
     @PostMapping
     @Transactional
@@ -32,7 +38,7 @@ public class TransacaoController {
     @GetMapping
     public ResponseEntity<Page<DadosListagemTransacao>> listar(@PageableDefault(size = 10, sort = {"dataTransacao"}) Pageable paginacao) {
         // converte lista de usuários para lista do DTO
-        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemTransacao::new);
+        var page = repository.findAllAtivas(paginacao);
         return ResponseEntity.ok(page);
     }
 
@@ -70,5 +76,21 @@ public class TransacaoController {
 
         return ResponseEntity.ok(new DadosDetalhamentoTransacao(transacao));
     }
+
+    @GetMapping("/{id}/converter")
+    public ResponseEntity<BigDecimal> converterValor(
+            @PathVariable Long id,
+            @RequestParam String moeda) {
+
+        Transacao transacao = repository.getReferenceById(id);
+
+        BigDecimal valorConvertido =
+                conversaoMoedaService.converter(
+                        transacao.getValor(),
+                        moeda
+                );
+        return ResponseEntity.ok(valorConvertido);
+    }
+
 }
 

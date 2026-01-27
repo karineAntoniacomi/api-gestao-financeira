@@ -29,7 +29,5 @@ public record DadosCadastroUsuario(
 
         @NotNull
         @Valid
-        DadosEndereco endereco,
-
-        BigDecimal saldo) {
+        DadosEndereco endereco) {
 }

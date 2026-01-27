@@ -1,4 +1,4 @@
-package br.com.gestao.financeira.api.config;
+package br.com.gestao.financeira.api;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,4 +12,3 @@ public class RestTemplateConfig {
         return new RestTemplate();
     }
 }
-

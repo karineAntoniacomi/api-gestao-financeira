@@ -2,6 +2,9 @@ spring:
   application:
     name: usuarios-service
 
+  profiles:
+    active: local
+
   jpa:
     open-in-view: false
     hibernate:
@@ -13,11 +16,3 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
-
-  spring:
-    profiles:
-       active: local
-
-  mockapi:
-    saldo:
-      url: https://mockapi.io/projects/69739102b5f46f8b5827af90

@@ -1,6 +1,7 @@
 package br.com.gestao.financeira.api.controller;
 
 import br.com.gestao.financeira.api.domain.usuario.*;
+import br.com.gestao.financeira.api.service.UsuarioService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,21 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired // injeção de dependência - spring fica responsável por instanciar
     private UsuarioRepository repository;
+
+    @Autowired
+    private UsuarioService service;
+
+    public UsuarioController(UsuarioService service) {
+        this.service = service;
+    }
 
     @PostMapping
     @Transactional
@@ -24,9 +34,10 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public Page<DadosListagemUsuario> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
-        // converte lista de usuários para lista do DTO
-        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemUsuario::new);
+    public Page<DadosListagemUsuario> listar(
+            @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao
+    ) {
+        return service.listarUsuariosComSaldo(paginacao);
     }
 
     @PutMapping
@@ -43,5 +54,6 @@ public class UsuarioController {
         usuario.excluir();
         return ResponseEntity.noContent().build();
     }
+
 }
 
