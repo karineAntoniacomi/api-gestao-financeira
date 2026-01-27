@@ -10,3 +10,9 @@ spring:
 
   flyway:
     enabled: true
+
+server:
+  port: 8081
+
+  error:
+    include-stacktrace: never

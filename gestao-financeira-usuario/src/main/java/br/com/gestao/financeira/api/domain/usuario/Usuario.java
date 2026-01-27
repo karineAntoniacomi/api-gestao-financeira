@@ -2,10 +2,7 @@ package br.com.gestao.financeira.api.domain.usuario;
 
 import br.com.gestao.financeira.api.domain.endereco.Endereco;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,6 +11,7 @@ import java.math.BigDecimal;
 @Entity(name = "Usuario")
 // anotações Lombok
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -36,8 +34,8 @@ public class Usuario {
         this.ativo = true;
         this.nome = dados.nome();
         this.email = dados.email();
-        this.cpf = dados.cpf();
-        this.telefone = dados.telefone();
+        this.cpf = dados.cpf().replaceAll("\\D", "");
+        this.telefone = dados.telefone().replaceAll("\\D", "");
         this.profissao = dados.profissao();
         this.endereco = new Endereco(dados.endereco());
     }

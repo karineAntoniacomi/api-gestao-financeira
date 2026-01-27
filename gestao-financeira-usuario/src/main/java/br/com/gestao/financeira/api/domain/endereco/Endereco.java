@@ -4,9 +4,11 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Endereco {
@@ -22,7 +24,7 @@ public class Endereco {
     public Endereco(DadosEndereco dados) {
         this.logradouro = dados.logradouro();
         this.bairro = dados.bairro();
-        this.cep = dados.cep();
+        this.cep = dados.cep().replaceAll("\\D", "");
         this.uf = dados.uf();
         this.cidade = dados.cidade();
         this.numero = dados.numero();

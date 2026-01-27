@@ -2,6 +2,7 @@ package br.com.gestao.financeira.api.controller;
 
 import br.com.gestao.financeira.api.domain.usuario.*;
 import br.com.gestao.financeira.api.service.UsuarioService;
+import br.com.gestao.financeira.api.domain.usuario.DadosDetalhamentoUsuario;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -29,22 +29,30 @@ public class UsuarioController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody @Valid DadosCadastroUsuario dados) {
-        repository.save(new Usuario(dados));
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroUsuario dados, UriComponentsBuilder uriBuilder) {
+        var usuario = new Usuario(dados);
+        repository.save(usuario);
+
+        var uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoUsuario(usuario));
     }
 
     @GetMapping
-    public Page<DadosListagemUsuario> listar(
+    public ResponseEntity<Page<DadosListagemUsuario>> listar(
             @PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao
     ) {
-        return service.listarUsuariosComSaldo(paginacao);
+        var page = service.listarUsuariosComSaldo(paginacao);
+        return ResponseEntity.ok(page);
     }
 
     @PutMapping
     @Transactional
-    public void atualizar(@RequestBody @Valid DadosAtualizacaoUsuario dados) {
+    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizacaoUsuario dados) {
         var usuario = repository.getReferenceById(dados.id());
         usuario.atualizarInformacoes(dados);
+
+        return ResponseEntity.ok(new DadosDetalhamentoUsuario(usuario));
     }
 
     @DeleteMapping("/{id}")
@@ -53,6 +61,14 @@ public class UsuarioController {
         var usuario = repository.getReferenceById(id);
         usuario.excluir();
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity detalhar(@PathVariable Long id) {
+        var usuario = repository.getReferenceById(id);
+
+        return ResponseEntity.ok(new DadosDetalhamentoUsuario(usuario));
     }
 
 }
