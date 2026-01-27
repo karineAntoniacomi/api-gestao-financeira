@@ -2,6 +2,7 @@ package br.com.gestao.financeira.api.controller;
 
 import br.com.gestao.financeira.api.domain.transacao.*;
 import br.com.gestao.financeira.api.service.ConversaoMoedaService;
+import br.com.gestao.financeira.api.service.TransacaoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class TransacaoController {
     private TransacaoRepository repository;
 
     @Autowired
-    private ConversaoMoedaService conversaoMoedaService;
+    private TransacaoService transacaoService;
 
     @PostMapping
     @Transactional
@@ -82,14 +83,7 @@ public class TransacaoController {
             @PathVariable Long id,
             @RequestParam String moeda) {
 
-        Transacao transacao = repository.getReferenceById(id);
-
-        BigDecimal valorConvertido =
-                conversaoMoedaService.converter(
-                        transacao.getValor(),
-                        moeda
-                );
-        return ResponseEntity.ok(valorConvertido);
+        return ResponseEntity.ok(transacaoService.converter(id, moeda));
     }
 
 }
