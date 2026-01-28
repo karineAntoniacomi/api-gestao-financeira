@@ -1,17 +1,14 @@
-package br.com.gestao.financeira.api.infra;
+package br.com.gestao.financeira.api.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
-
 @RestControllerAdvice
-public class TratadorDeErros {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity tratarErro404() {
@@ -24,11 +21,6 @@ public class TratadorDeErros {
         return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao::new).toList());
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity tratarErro400(MissingServletRequestParameterException ex) {
-        return ResponseEntity.badRequest().body(List.of(new DadosErroValidacao(ex.getParameterName(), ex.getMessage())));
-    }
-
     private record DadosErroValidacao(String campo, String mensagem) {
 
         public DadosErroValidacao(FieldError erro) {
@@ -36,5 +28,4 @@ public class TratadorDeErros {
         }
     }
 }
-
 
