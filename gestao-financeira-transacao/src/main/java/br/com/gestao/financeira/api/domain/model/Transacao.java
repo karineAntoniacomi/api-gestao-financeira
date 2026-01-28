@@ -1,5 +1,7 @@
-package br.com.gestao.financeira.api.domain.transacao;
+package br.com.gestao.financeira.api.domain.model;
 
+import br.com.gestao.financeira.api.dto.DadosAtualizacaoTransacao;
+import br.com.gestao.financeira.api.dto.DadosCadastroTransacao;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Past;

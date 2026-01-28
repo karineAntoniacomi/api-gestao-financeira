@@ -1,5 +1,6 @@
-package br.com.gestao.financeira.api.domain.transacao;
+package br.com.gestao.financeira.api.dto;
 
+import br.com.gestao.financeira.api.domain.model.TipoTransacao;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;

@@ -1,7 +1,7 @@
 package br.com.gestao.financeira.api.service;
 
 import br.com.gestao.financeira.api.config.BrasilApiProperties;
-import br.com.gestao.financeira.api.domain.transacao.DadosCambio;
+import br.com.gestao.financeira.api.dto.DadosCambio;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;

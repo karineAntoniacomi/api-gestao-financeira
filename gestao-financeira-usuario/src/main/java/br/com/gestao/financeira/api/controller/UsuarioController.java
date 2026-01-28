@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    @Autowired // injeção de dependência - spring fica responsável por instanciar
+    @Autowired
     private UsuarioRepository repository;
 
     @Autowired
@@ -48,8 +48,9 @@ public class UsuarioController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizacaoUsuario dados) {
-        var usuario = repository.getReferenceById(dados.id());
+    public ResponseEntity<DadosDetalhamentoUsuario> atualizar(@PathVariable Long id,
+                                    @RequestBody @Valid DadosAtualizacaoUsuario dados) {
+        var usuario = repository.getReferenceById(id);
         usuario.atualizarInformacoes(dados);
 
         return ResponseEntity.ok(new DadosDetalhamentoUsuario(usuario));

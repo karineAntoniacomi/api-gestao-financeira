@@ -1,5 +1,8 @@
-package br.com.gestao.financeira.api.domain.transacao;
+package br.com.gestao.financeira.api.dto;
 
+
+import br.com.gestao.financeira.api.domain.model.TipoTransacao;
+import br.com.gestao.financeira.api.domain.model.Transacao;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

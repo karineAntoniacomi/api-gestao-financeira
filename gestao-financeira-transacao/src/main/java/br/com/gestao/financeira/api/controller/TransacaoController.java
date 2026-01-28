@@ -1,7 +1,11 @@
 package br.com.gestao.financeira.api.controller;
 
-import br.com.gestao.financeira.api.domain.transacao.*;
-import br.com.gestao.financeira.api.service.ConversaoMoedaService;
+import br.com.gestao.financeira.api.domain.model.Transacao;
+import br.com.gestao.financeira.api.domain.port.TransacaoRepository;
+import br.com.gestao.financeira.api.dto.DadosAtualizacaoTransacao;
+import br.com.gestao.financeira.api.dto.DadosCadastroTransacao;
+import br.com.gestao.financeira.api.dto.DadosDetalhamentoTransacao;
+import br.com.gestao.financeira.api.dto.DadosListagemTransacao;
 import br.com.gestao.financeira.api.service.TransacaoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -19,7 +23,7 @@ import java.math.BigDecimal;
 @RequestMapping("/transacoes")
 public class TransacaoController {
 
-    @Autowired // injeção de dependência - spring fica responsável por instanciar
+    @Autowired
     private TransacaoRepository repository;
 
     @Autowired
@@ -60,6 +64,7 @@ public class TransacaoController {
             @RequestBody @Valid DadosAtualizacaoTransacao dados) {
         var transacao = repository.getReferenceById(id);
         transacao.atualizarInformacoes(dados);
+
         return ResponseEntity.ok(new DadosDetalhamentoTransacao(transacao));
     }
 

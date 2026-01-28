@@ -1,7 +1,7 @@
 package br.com.gestao.financeira.api.service;
 
-import br.com.gestao.financeira.api.domain.transacao.Transacao;
-import br.com.gestao.financeira.api.domain.transacao.TransacaoRepository;
+import br.com.gestao.financeira.api.domain.model.Transacao;
+import br.com.gestao.financeira.api.domain.port.TransacaoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

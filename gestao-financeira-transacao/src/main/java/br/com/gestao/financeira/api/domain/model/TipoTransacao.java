@@ -1,4 +1,4 @@
-package br.com.gestao.financeira.api.domain.transacao;
+package br.com.gestao.financeira.api.domain.model;
 
 public enum TipoTransacao {
     DEPOSITO,

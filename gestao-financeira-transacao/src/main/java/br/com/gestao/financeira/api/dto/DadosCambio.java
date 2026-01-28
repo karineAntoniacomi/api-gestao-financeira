@@ -1,4 +1,4 @@
-package br.com.gestao.financeira.api.domain.transacao;
+package br.com.gestao.financeira.api.dto;
 
 import java.math.BigDecimal;
 
