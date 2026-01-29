@@ -7,6 +7,7 @@ import br.com.gestao.financeira.api.dto.DadosResumoDiario;
 import br.com.gestao.financeira.api.dto.DadosResumoMensal;
 import br.com.gestao.financeira.api.dto.ResumoDiarioProjection;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -34,7 +35,8 @@ class ResumoTransacaoServiceTest {
     }
 
     @Test
-    void deveRetornarResumoPorCategoria() {
+    @DisplayName("Deveria retornar resumo por categoria")
+    void resumo_por_categoria_cenario1() {
         Long usuarioId = 1L;
         var resumo = new DadosResumoCategoria(TipoTransacao.COMPRA, new BigDecimal("100.00"));
         when(repository.totalPorCategoria(eq(usuarioId), anyList())).thenReturn(List.of(resumo));
@@ -47,7 +49,8 @@ class ResumoTransacaoServiceTest {
     }
 
     @Test
-    void deveRetornarResumoPorDia() {
+    @DisplayName("Deveria retornar resumo por dia")
+    void resumo_por_dia_cenario1() {
         Long usuarioId = 1L;
         LocalDate hoje = LocalDate.now();
         ResumoDiarioProjection projection = new ResumoDiarioProjection() {
@@ -66,7 +69,8 @@ class ResumoTransacaoServiceTest {
     }
 
     @Test
-    void deveRetornarResumoPorMes() {
+    @DisplayName("Deveria retornar resumo por mes")
+    void resumo_por_mes_cenario1() {
         Long usuarioId = 1L;
         var resumo = new DadosResumoMensal(2026, 1, new BigDecimal("500.00"));
         when(repository.totalPorMes(eq(usuarioId), anyList())).thenReturn(List.of(resumo));

@@ -34,14 +34,14 @@ class ResumoTransacaoControllerTest {
 
     @Test
     @DisplayName("Deveria devolver codigo http 404 quando usuarioId não é passado no path")
-    void porDiaCenario1() throws Exception {
+    void por_dia_cenario1() throws Exception {
         mvc.perform(get("/transacoes/resumo/dia"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @DisplayName("Deveria devolver codigo http 200 quando informacoes estao validas no path")
-    void porDiaCenario2() throws Exception {
+    void por_dia_cenario2() throws Exception {
         when(service.resumoPorDia(anyLong())).thenReturn(List.of());
 
         mvc.perform(get("/transacoes/resumo/1/dia"))
@@ -50,21 +50,14 @@ class ResumoTransacaoControllerTest {
 
     @Test
     @DisplayName("Deveria devolver codigo http 404 quando usuarioId não é passado no path para resumo por categoria")
-    void porCategoriaCenario1() throws Exception {
+    void por_categoria_cenario1() throws Exception {
         mvc.perform(get("/transacoes/resumo/categoria"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    @DisplayName("Deveria devolver codigo http 404 quando usuarioId não é passado no path para resumo por mes")
-    void porMesCenario1() throws Exception {
-        mvc.perform(get("/transacoes/resumo/mes"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     @DisplayName("Deveria devolver codigo http 200 quando informacoes estao validas no path para resumo por categoria")
-    void porCategoriaCenario2() throws Exception {
+    void por_categoria_cenario2() throws Exception {
         when(service.resumoPorCategoria(anyLong())).thenReturn(List.of());
 
         mvc.perform(get("/transacoes/resumo/1/categoria"))
@@ -72,8 +65,15 @@ class ResumoTransacaoControllerTest {
     }
 
     @Test
+    @DisplayName("Deveria devolver codigo http 404 quando usuarioId não é passado no path para resumo por mes")
+    void por_mes_cenario1() throws Exception {
+        mvc.perform(get("/transacoes/resumo/mes"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     @DisplayName("Deveria devolver codigo http 200 quando informacoes estao validas no path para resumo por mes")
-    void porMesCenario2() throws Exception {
+    void por_mes_cenario2() throws Exception {
         when(service.resumoPorMes(anyLong())).thenReturn(List.of());
 
         mvc.perform(get("/transacoes/resumo/1/mes"))
@@ -82,7 +82,7 @@ class ResumoTransacaoControllerTest {
 
     @Test
     @DisplayName("Deveria devolver codigo http 200 ao baixar relatorio excel")
-    void downloadExcel() throws Exception {
+    void download_excel_cenario1() throws Exception {
         when(relatorioService.gerarExcel(anyLong())).thenReturn(new ByteArrayInputStream(new byte[0]));
 
         mvc.perform(get("/transacoes/resumo/1/relatorio/excel"))
@@ -93,7 +93,7 @@ class ResumoTransacaoControllerTest {
 
     @Test
     @DisplayName("Deveria devolver codigo http 200 ao baixar relatorio pdf")
-    void downloadPdf() throws Exception {
+    void download_pdf_cenario1() throws Exception {
         when(relatorioService.gerarPdf(anyLong())).thenReturn(new ByteArrayInputStream(new byte[0]));
 
         mvc.perform(get("/transacoes/resumo/1/relatorio/pdf"))
