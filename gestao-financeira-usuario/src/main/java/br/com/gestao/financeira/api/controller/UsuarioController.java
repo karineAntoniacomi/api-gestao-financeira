@@ -7,6 +7,7 @@ import br.com.gestao.financeira.api.domain.usuario.dto.DadosCadastroUsuario;
 import br.com.gestao.financeira.api.domain.usuario.dto.DadosDetalhamentoUsuario;
 import br.com.gestao.financeira.api.domain.usuario.dto.DadosListagemUsuario;
 import br.com.gestao.financeira.api.service.UsuarioService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/usuarios")
+@SecurityRequirement(name = "bearer-key")
 public class UsuarioController {
 
     @Autowired

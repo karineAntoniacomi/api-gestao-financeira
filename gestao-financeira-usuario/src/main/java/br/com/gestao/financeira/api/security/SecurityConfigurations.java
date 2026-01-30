@@ -38,7 +38,9 @@ public class SecurityConfigurations {
 
     private void configureAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
         auth.requestMatchers(LOGIN_METHOD, LOGIN_ENDPOINT).permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated();
+
     }
 
     @Bean

@@ -2,6 +2,7 @@ package br.com.gestao.financeira.api.controller;
 
 import br.com.gestao.financeira.api.service.RelatorioService;
 import br.com.gestao.financeira.api.service.ResumoTransacaoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/transacoes/resumo")
+@SecurityRequirement(name = "bearer-key")
 public class ResumoTransacaoController {
 
     private final ResumoTransacaoService service;

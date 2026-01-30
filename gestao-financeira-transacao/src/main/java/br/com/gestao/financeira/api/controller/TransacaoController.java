@@ -8,6 +8,7 @@ import br.com.gestao.financeira.api.dto.DadosDetalhamentoTransacao;
 import br.com.gestao.financeira.api.dto.DadosListagemTransacao;
 import br.com.gestao.financeira.api.service.MensageriaService;
 import br.com.gestao.financeira.api.service.TransacaoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/transacoes")
+@SecurityRequirement(name = "bearer-key")
 public class TransacaoController {
 
     @Autowired

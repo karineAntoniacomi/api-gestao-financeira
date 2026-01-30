@@ -1,6 +1,7 @@
 package br.com.gestao.financeira.api.controller;
 
 import br.com.gestao.financeira.api.service.UsuarioImportacaoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/usuarios")
+@SecurityRequirement(name = "bearer-key")
 public class UsuarioImportacaoController {
 
     private final UsuarioImportacaoService service;

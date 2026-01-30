@@ -2,6 +2,7 @@ package br.com.gestao.financeira.api.controller;
 
 import br.com.gestao.financeira.api.domain.usuario.Usuario;
 import br.com.gestao.financeira.api.domain.usuario.UsuarioRepository;
+import br.com.gestao.financeira.api.security.TokenService;
 import br.com.gestao.financeira.api.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.endsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,6 +38,9 @@ class UsuarioControllerTest {
 
     @MockitoBean
     private UsuarioService service;
+
+    @MockitoBean
+    private TokenService tokenService;
 
     @Test
     @DisplayName("Deveria devolver codigo http 201 quando informacoes estao validas")
@@ -71,7 +76,7 @@ class UsuarioControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "http://localhost/usuarios/1"));
+                .andExpect(header().string("Location", endsWith("/usuarios/1")));
 
         verify(repository).save(any(Usuario.class));
     }
