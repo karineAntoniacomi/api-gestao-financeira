@@ -1,6 +1,6 @@
 package br.com.gestao.financeira.api.controller;
 
-import br.com.gestao.financeira.api.domain.usuario.DadosAutenticacao;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosAutenticacao;
 import br.com.gestao.financeira.api.domain.usuario.Usuario;
 import br.com.gestao.financeira.api.security.DadosTokenJWT;
 import br.com.gestao.financeira.api.security.TokenService;

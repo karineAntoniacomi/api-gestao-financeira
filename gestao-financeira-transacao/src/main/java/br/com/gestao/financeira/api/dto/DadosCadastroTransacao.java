@@ -1,6 +1,6 @@
 package br.com.gestao.financeira.api.dto;
 
-import br.com.gestao.financeira.api.domain.model.TipoTransacao;
+import br.com.gestao.financeira.api.domain.TipoTransacao;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -14,8 +14,5 @@ public record DadosCadastroTransacao(
         BigDecimal valor,
 
         @NotNull(message = "{dataTransacao.obrigatoria}")
-        LocalDateTime dataTransacao,
-
-        @NotNull
-        Long usuarioId) {
+        LocalDateTime dataTransacao) {
 }

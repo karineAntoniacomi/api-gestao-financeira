@@ -1,16 +1,15 @@
 package br.com.gestao.financeira.api.service;
 
-import br.com.gestao.financeira.api.domain.model.TipoTransacao;
-import br.com.gestao.financeira.api.domain.port.TransacaoRepository;
+import br.com.gestao.financeira.api.domain.TipoTransacao;
 import br.com.gestao.financeira.api.dto.DadosResumoCategoria;
-import br.com.gestao.financeira.api.dto.DadosResumoDiario;
 import br.com.gestao.financeira.api.dto.DadosResumoMensal;
 import br.com.gestao.financeira.api.dto.ResumoDiarioProjection;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import br.com.gestao.financeira.api.repository.TransacaoRepository;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,6 +31,15 @@ class ResumoTransacaoServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         service = new ResumoTransacaoService(repository);
+
+        Long usuarioIdAutenticado = 1L;
+        var authentication = new UsernamePasswordAuthenticationToken(usuarioIdAutenticado, null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -53,12 +61,19 @@ class ResumoTransacaoServiceTest {
     void resumo_por_dia_cenario1() {
         Long usuarioId = 1L;
         LocalDate hoje = LocalDate.now();
+
         ResumoDiarioProjection projection = new ResumoDiarioProjection() {
             @Override
-            public LocalDate getData() { return hoje; }
+            public LocalDate getData() {
+                return hoje;
+            }
+
             @Override
-            public BigDecimal getTotal() { return new BigDecimal("50.00"); }
+            public BigDecimal getTotal() {
+                return new BigDecimal("50.00");
+            }
         };
+
         when(repository.totalPorDia(eq(usuarioId), anyList())).thenReturn(List.of(projection));
 
         var resultado = service.resumoPorDia(usuarioId);

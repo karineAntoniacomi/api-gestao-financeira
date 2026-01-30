@@ -10,3 +10,14 @@ spring:
 
   flyway:
     enabled: true
+
+server:
+  port: 8082
+
+  error:
+    include-stacktrace: never
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET}

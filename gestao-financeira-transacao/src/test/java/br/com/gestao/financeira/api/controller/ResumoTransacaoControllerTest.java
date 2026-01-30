@@ -21,7 +21,12 @@ import br.com.gestao.financeira.api.exception.GlobalExceptionHandler;
 
 @WebMvcTest(ResumoTransacaoController.class)
 @Import(GlobalExceptionHandler.class)
+@org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc(addFilters = false)
+@org.springframework.test.context.ActiveProfiles("test")
 class ResumoTransacaoControllerTest {
+
+    @MockitoBean
+    private br.com.gestao.financeira.api.service.TokenService tokenService;
 
     @Autowired
     private MockMvc mvc;

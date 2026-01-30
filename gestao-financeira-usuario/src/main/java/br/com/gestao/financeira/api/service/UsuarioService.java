@@ -1,7 +1,7 @@
 package br.com.gestao.financeira.api.service;
 
-import br.com.gestao.financeira.api.domain.usuario.DadosListagemUsuario;
-import br.com.gestao.financeira.api.domain.usuario.SaldoContaDTO;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosListagemUsuario;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosSaldoConta;
 import br.com.gestao.financeira.api.domain.usuario.Usuario;
 import br.com.gestao.financeira.api.domain.usuario.UsuarioRepository;
 import org.springframework.data.domain.Page;
@@ -32,10 +32,10 @@ public class UsuarioService {
         Map<Long, BigDecimal> saldoPorUsuario =
                 contaClient.listarContas()
                         .stream()
-                        .filter(SaldoContaDTO::ativa)
+                        .filter(DadosSaldoConta::ativa)
                         .collect(Collectors.toMap(
-                                SaldoContaDTO::usuarioId,
-                                SaldoContaDTO::saldo
+                                DadosSaldoConta::usuarioId,
+                                DadosSaldoConta::saldo
                         ));
 
         // Converte Page<Usuario> → Page<DadosListagemUsuario>

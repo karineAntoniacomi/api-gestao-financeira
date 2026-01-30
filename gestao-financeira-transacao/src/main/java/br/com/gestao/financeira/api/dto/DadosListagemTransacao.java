@@ -1,6 +1,7 @@
 package br.com.gestao.financeira.api.dto;
 
-import br.com.gestao.financeira.api.domain.model.TipoTransacao;
+import br.com.gestao.financeira.api.domain.StatusTransacao;
+import br.com.gestao.financeira.api.domain.TipoTransacao;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ public record DadosListagemTransacao(
         TipoTransacao tipoTransacao,
         BigDecimal valor,
         LocalDateTime dataTransacao,
-        Long usuarioId
+        Long usuarioId,
+        StatusTransacao status
 ) {}
 

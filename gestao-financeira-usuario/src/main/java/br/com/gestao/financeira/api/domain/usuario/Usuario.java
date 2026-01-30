@@ -1,13 +1,14 @@
 package br.com.gestao.financeira.api.domain.usuario;
 
 import br.com.gestao.financeira.api.domain.endereco.Endereco;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosAtualizacaoUsuario;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosCadastroUsuario;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 

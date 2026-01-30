@@ -1,6 +1,6 @@
 package br.com.gestao.financeira.api.controller;
 
-import br.com.gestao.financeira.api.domain.usuario.DadosAutenticacao;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosAutenticacao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

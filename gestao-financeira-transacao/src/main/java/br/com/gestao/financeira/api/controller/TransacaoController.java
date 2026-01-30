@@ -1,11 +1,12 @@
 package br.com.gestao.financeira.api.controller;
 
-import br.com.gestao.financeira.api.domain.model.Transacao;
-import br.com.gestao.financeira.api.domain.port.TransacaoRepository;
+import br.com.gestao.financeira.api.domain.Transacao;
+import br.com.gestao.financeira.api.repository.TransacaoRepository;
 import br.com.gestao.financeira.api.dto.DadosAtualizacaoTransacao;
 import br.com.gestao.financeira.api.dto.DadosCadastroTransacao;
 import br.com.gestao.financeira.api.dto.DadosDetalhamentoTransacao;
 import br.com.gestao.financeira.api.dto.DadosListagemTransacao;
+import br.com.gestao.financeira.api.service.MensageriaService;
 import br.com.gestao.financeira.api.service.TransacaoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -29,15 +31,32 @@ public class TransacaoController {
     @Autowired
     private TransacaoService transacaoService;
 
+    @Autowired
+    private MensageriaService mensageriaService;
+
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTransacao dados, UriComponentsBuilder uriBuilder) {
-        var transacao = new Transacao(dados);
+    public ResponseEntity cadastrar(
+            @RequestBody @Valid DadosCadastroTransacao dados,
+            UriComponentsBuilder uriBuilder) {
+        
+        var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        String usuarioId;
+        if (auth.getPrincipal() instanceof org.springframework.security.core.userdetails.UserDetails) {
+            usuarioId = ((org.springframework.security.core.userdetails.UserDetails) auth.getPrincipal()).getUsername();
+        } else {
+            usuarioId = auth.getPrincipal().toString();
+        }
+        
+        var transacao = new Transacao(dados, Long.valueOf(usuarioId));
         repository.save(transacao);
 
         var uri = uriBuilder.path("/transacoes/{id}").buildAndExpand(transacao.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoTransacao(transacao));
+        var dto = new DadosDetalhamentoTransacao(transacao);
+        mensageriaService.notificarTransacao(dto);
+
+        return ResponseEntity.created(uri).body(dto);
     }
 
     @GetMapping
@@ -52,8 +71,8 @@ public class TransacaoController {
     public ResponseEntity<DadosDetalhamentoTransacao> atualizarParcial(
             @PathVariable Long id,
             @RequestBody DadosAtualizacaoTransacao dados) {
-        var transacao = repository.getReferenceById(id);
-        transacao.atualizarInformacoes(dados);
+
+        Transacao transacao = transacaoService.atualizarParcial(id, dados);
         return ResponseEntity.ok(new DadosDetalhamentoTransacao(transacao));
     }
 
@@ -62,24 +81,21 @@ public class TransacaoController {
     public ResponseEntity<DadosDetalhamentoTransacao> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid DadosAtualizacaoTransacao dados) {
-        var transacao = repository.getReferenceById(id);
-        transacao.atualizarInformacoes(dados);
 
+        Transacao transacao = transacaoService.atualizar(id, dados);
         return ResponseEntity.ok(new DadosDetalhamentoTransacao(transacao));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
-        var transacao = repository.getReferenceById(id);
-        transacao.excluir();
+        transacaoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
-        var transacao = repository.getReferenceById(id);
-
+        Transacao transacao = transacaoService.detalhar(id);
         return ResponseEntity.ok(new DadosDetalhamentoTransacao(transacao));
     }
 

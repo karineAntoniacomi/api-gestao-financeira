@@ -1,6 +1,6 @@
 package br.com.gestao.financeira.api.service;
 
-import br.com.gestao.financeira.api.domain.usuario.SaldoContaDTO;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosSaldoConta;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,9 +19,9 @@ public class ContaClient {
         this.restTemplate = restTemplate;
     }
 
-    public List<SaldoContaDTO> listarContas() {
-        SaldoContaDTO[] response =
-                restTemplate.getForObject(URL, SaldoContaDTO[].class);
+    public List<DadosSaldoConta> listarContas() {
+        DadosSaldoConta[] response =
+                restTemplate.getForObject(URL, DadosSaldoConta[].class);
 
         return Arrays.asList(response);
     }

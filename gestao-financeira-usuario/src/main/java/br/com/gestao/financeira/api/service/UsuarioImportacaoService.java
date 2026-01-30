@@ -2,7 +2,7 @@ package br.com.gestao.financeira.api.service;
 
 import br.com.gestao.financeira.api.domain.endereco.DadosEndereco;
 import br.com.gestao.financeira.api.domain.endereco.Endereco;
-import br.com.gestao.financeira.api.domain.usuario.DadosImportacaoUsuario;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosImportacaoUsuario;
 import br.com.gestao.financeira.api.domain.usuario.Usuario;
 import br.com.gestao.financeira.api.domain.usuario.UsuarioRepository;
 import org.apache.poi.ss.usermodel.*;

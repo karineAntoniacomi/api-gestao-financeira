@@ -1,7 +1,7 @@
 package br.com.gestao.financeira.api.service;
 
-import br.com.gestao.financeira.api.domain.usuario.DadosListagemUsuario;
-import br.com.gestao.financeira.api.domain.usuario.SaldoContaDTO;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosListagemUsuario;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosSaldoConta;
 import br.com.gestao.financeira.api.domain.usuario.Usuario;
 import br.com.gestao.financeira.api.domain.usuario.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,9 +58,9 @@ class UsuarioServiceTest {
         List<Usuario> usuarios = Arrays.asList(usuario1, usuario2);
         Page<Usuario> usuariosPage = new PageImpl<>(usuarios);
 
-        SaldoContaDTO saldo1 = new SaldoContaDTO(1L, new BigDecimal("100.50"), "BRL", true);
-        SaldoContaDTO saldo2 = new SaldoContaDTO(2L, new BigDecimal("250.75"), "BRL", true);
-        List<SaldoContaDTO> saldos = Arrays.asList(saldo1, saldo2);
+        DadosSaldoConta saldo1 = new DadosSaldoConta(1L, new BigDecimal("100.50"), "BRL", true);
+        DadosSaldoConta saldo2 = new DadosSaldoConta(2L, new BigDecimal("250.75"), "BRL", true);
+        List<DadosSaldoConta> saldos = Arrays.asList(saldo1, saldo2);
 
         when(usuarioRepository.findAllByAtivoTrue(any(Pageable.class))).thenReturn(usuariosPage);
         when(contaClient.listarContas()).thenReturn(saldos);

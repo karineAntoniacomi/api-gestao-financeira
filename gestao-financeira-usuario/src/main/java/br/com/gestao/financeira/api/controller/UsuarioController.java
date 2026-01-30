@@ -1,16 +1,23 @@
 package br.com.gestao.financeira.api.controller;
 
-import br.com.gestao.financeira.api.domain.usuario.*;
+import br.com.gestao.financeira.api.domain.usuario.Usuario;
+import br.com.gestao.financeira.api.domain.usuario.UsuarioRepository;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosAtualizacaoUsuario;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosCadastroUsuario;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosDetalhamentoUsuario;
+import br.com.gestao.financeira.api.domain.usuario.dto.DadosListagemUsuario;
 import br.com.gestao.financeira.api.service.UsuarioService;
-import br.com.gestao.financeira.api.domain.usuario.DadosDetalhamentoUsuario;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
@@ -46,10 +53,13 @@ public class UsuarioController {
         return ResponseEntity.ok(page);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<DadosDetalhamentoUsuario> atualizar(@PathVariable Long id,
-                                    @RequestBody @Valid DadosAtualizacaoUsuario dados) {
+                                                              @RequestBody @Valid DadosAtualizacaoUsuario dados,
+                                                              @AuthenticationPrincipal Usuario usuarioAutenticado) {
+        assertSelf(id, usuarioAutenticado);
+
         var usuario = repository.getReferenceById(id);
         usuario.atualizarInformacoes(dados);
 
@@ -58,7 +68,10 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity excluir(@PathVariable Long id) {
+    public ResponseEntity excluir(@PathVariable Long id,
+                                  @AuthenticationPrincipal Usuario usuarioAutenticado) {
+        assertSelf(id, usuarioAutenticado);
+
         var usuario = repository.getReferenceById(id);
         usuario.excluir();
         return ResponseEntity.noContent().build();
@@ -66,11 +79,20 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity detalhar(@PathVariable Long id) {
-        var usuario = repository.getReferenceById(id);
+    public ResponseEntity detalhar(@PathVariable Long id,
+                                   @AuthenticationPrincipal Usuario usuarioAutenticado) {
+        assertSelf(id, usuarioAutenticado);
 
+        var usuario = repository.getReferenceById(id);
         return ResponseEntity.ok(new DadosDetalhamentoUsuario(usuario));
     }
 
+    private void assertSelf(Long requestedUserId, Usuario usuarioAutenticado) {
+        if (usuarioAutenticado == null || usuarioAutenticado.getId() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário não autenticado");
+        }
+        if (!requestedUserId.equals(usuarioAutenticado.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não pode acessar dados de outro usuário");
+        }
+    }
 }
-
