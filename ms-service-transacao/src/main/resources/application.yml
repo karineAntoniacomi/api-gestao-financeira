@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: ms-service-transacao
+
+  profiles:
+    active: local
+
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: transacoes-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:12345678}
+
+exchangerateapi:
+  cambio:
+    url: ${EXCHANGE_RATE_API_URL}

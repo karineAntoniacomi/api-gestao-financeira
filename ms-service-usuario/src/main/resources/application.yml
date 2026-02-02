@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: ms-service-usuario
+
+  profiles:
+    active: local
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+api:
+  conta:
+    url: ${API_CONTA_URL}
+
